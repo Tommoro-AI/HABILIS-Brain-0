@@ -1,0 +1,9 @@
+benchmark: libero-pro
+checkpoint: hf://Tommoro-AI/HABILIS-Brain-0
+cache: ~/.cache/gcvla/habilis-brain-0/extracted
+output_dir: ../outputs/libero-pro
+python: ../.venv/bin/python
+libero_repo: ../external/LIBERO-PRO
+libero_config: ../external/libero-pro-config
+asset_lock: ../external/libero-pro-config/assets.lock.json
+gpu: 0

@@ -1,0 +1,14 @@
+{
+  "libero": {
+    "repository": "https://github.com/Lifelong-Robot-Learning/LIBERO.git",
+    "commit": "f78abd68ee283de9f9be3c8f7e2a9ad60246e95c",
+    "asset_repository_commit": "f78abd68ee283de9f9be3c8f7e2a9ad60246e95c"
+  },
+  "libero-pro": {
+    "repository": "https://github.com/Zxy-MLlab/LIBERO-PRO.git",
+    "commit": "eafdb809426b13153aa1e4c42d6601844217dfec",
+    "data_repository": "https://huggingface.co/datasets/zhouxueyang/LIBERO-Pro",
+    "data_revision": "c86fc3b8293185a6f373677018ff3e37f8391602",
+    "asset_repository_commit": "eafdb809426b13153aa1e4c42d6601844217dfec"
+  }
+}

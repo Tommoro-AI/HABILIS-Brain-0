@@ -139,14 +139,20 @@ def environment(cfg, output):
     return env
 
 
+def inference_device() -> str | None:
+    device = os.environ.get("GCVLA_DEVICE", "").strip().lower()
+    if device and device not in {"cuda", "xpu", "cpu"}:
+        raise ValueError("GCVLA_DEVICE must be cuda, xpu, or cpu")
+    return device or None
+
+
 def command(cfg, suite, task, output):
-    return [
+    args = [
         str(cfg.python),
         str(Path(__file__).with_name("runtime_eval.py")),
         "--seed=1000",
         "--policy.type=molmoact2",
         f"--policy.checkpoint_path={cfg.cache / 'gc-vla'}",
-        "--policy.device=cuda",
         "--policy.norm_tag=libero",
         "--policy.enable_depth_reasoning=true",
         "--policy.num_depth_tokens_per_image=200",
@@ -164,6 +170,10 @@ def command(cfg, suite, task, output):
         "--eval.n_episodes=50",
         f"--output_dir={output}",
     ]
+    device = inference_device()
+    if device is not None:
+        args.insert(5, f"--policy.device={device}")
+    return args
 
 
 def read_result(output, suite, task):

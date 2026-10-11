@@ -49,9 +49,28 @@ python -m venv --system-site-packages .venv
 .venv/bin/python -m pip install --no-deps --no-build-isolation .
 ```
 
-The manual commands require a CUDA PyTorch environment compatible with the pinned
-runtime requirements. The hash-checked `requirements-runtime.txt` is the Linux
-installation contract.
+The manual commands require a PyTorch environment compatible with the pinned
+runtime requirements. CUDA and Intel XPU are supported; inference uses eager
+mode (CUDA graphs are disabled). The runtime selects CUDA when available,
+otherwise XPU, otherwise CPU when `GCVLA_DEVICE` is unset. To force a device,
+set `GCVLA_DEVICE` to `cuda`, `xpu`, or `cpu`; the evaluator then passes the same
+explicit value as `--policy.device`. The hash-checked
+`requirements-runtime.txt` is the Linux installation contract.
+
+For Intel XPU, install an XPU-enabled PyTorch build instead of CUDA wheels and
+run the container with `/dev/dri` plus the host `video` and `render` groups:
+
+```bash
+python -m pip install torch torchvision torchaudio \
+  --index-url https://download.pytorch.org/whl/xpu
+docker run --rm --device=/dev/dri --group-add video --group-add render \
+  -e GCVLA_DEVICE=xpu ...
+```
+
+No CUDA-only extension is required for XPU or CPU. Keep eager mode enabled by
+leaving `enable_inference_cuda_graph=false`; `--use_compile` is not required for
+this path. XPU and CPU outputs should match the CUDA path closely, with small
+float32 flow-matching rounding drift expected.
 The Qwen/Qwen3-4B **tokenizer only** is fetched/cached by Transformers on first use;
 all model/router/residual weights come from the unified checkpoint.
 

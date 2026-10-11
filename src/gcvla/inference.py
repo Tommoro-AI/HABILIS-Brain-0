@@ -5,7 +5,7 @@ import sys
 
 from gcvla.checkpoint import prepare_checkpoint
 from gcvla.contracts import assert_no_future_gc_at_inference
-from gcvla.runner import environment
+from gcvla.runner import environment, inference_device
 from gcvla.runtime_compat import register_public_model_name
 
 
@@ -27,7 +27,7 @@ def load_policy(config):
     policy = MolmoAct2Policy(
         MolmoAct2Config(
             checkpoint_path=str(config.cache / "gc-vla"),
-            device="cuda",
+            device=inference_device(),
             norm_tag="libero",
             num_steps=10,
             inference_dtype="float32",
